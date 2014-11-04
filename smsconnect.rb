@@ -49,10 +49,7 @@ class Smsconnect
 		data['action'] = 'send_sms'
 		data['number'] = number
 		data['message'] = text.gsub(/ /, '+')
-		# puts data
-		# puts API_SCRIPT
 		data = data.map{|k,v| "#{k}=#{v}"}.join('&')
-		puts data
 		url = URI.parse(API_SCRIPT + data)
 		req = Net::HTTP::Get.new(url.to_s)
 		res = Net::HTTP.start(url.host, url.port) {|http|
