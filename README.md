@@ -24,7 +24,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Inbox
+
+```ruby
+require 'smsconnect'
+
+sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
+sms.inbox
+```
+
+### Send SMS
+
+```ruby
+require 'smsconnect'
+
+sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
+sms.send('<phone_number>', '<text_sms>')
+```
 
 ## Contributing
 
