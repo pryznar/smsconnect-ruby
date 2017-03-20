@@ -4,7 +4,7 @@
 
 Send and receive SMS with Ruby (for Czech Republic)
 
-[Registration](http://www.smsbrana.cz/registrace.html)
+[Registration](https://www.smsbrana.cz/registrace.html)
 
 ## Installation
 
@@ -30,7 +30,7 @@ Or install it yourself as:
 require 'smsconnect'
 
 sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
-sms.inbox
+puts sms.inbox
 ```
 
 ### Send SMS
@@ -39,12 +39,12 @@ sms.inbox
 require 'smsconnect'
 
 sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
-sms.send('<phone_number>', '<text_sms>')
+puts sms.send('<phone_number>', '<text_sms>')
 ```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/smsconnect/fork )
+1. Fork it ( https://github.com/pryznar/smsconnect/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
