@@ -1,4 +1,4 @@
-require "smsconnect/version"
+require 'smsconnect/version'
 require 'digest'
 require 'securerandom'
 require 'net/http'
@@ -6,7 +6,7 @@ require 'net/http'
 module Smsconnect
     class Smsconnect
         
-        API_SCRIPT = "http://api.smsbrana.cz/smsconnect/http.php?"
+        API_SCRIPT = "https://api.smsbrana.cz/smsconnect/http.php?"
         
         def initialize(settings)
             @settings = settings
@@ -17,21 +17,19 @@ module Smsconnect
         end
         
         def getAuth
-            if @settings['login'].nil? && @settings['password'].nil?
-                return false
-                else
-                t = Time.new
-                time = t.strftime("%Y%m%d") + "T" + t.strftime("%H%M%S")
-                salt = self.salt(10)
+            return false if @settings['login'].nil? && @settings['password'].nil?
                 
-                result = {}
-                result['login'] = @settings['login']
-                result['time'] = time
-                result['salt'] = salt
-                result['hash'] = Digest::MD5.hexdigest(@settings['password'] + time + salt)
-                
-                return result
-            end
+            t = Time.new
+            time = t.strftime("%Y%m%d") + "T" + t.strftime("%H%M%S")
+            salt = self.salt(10)
+            
+            result = {}
+            result['login'] = @settings['login']
+            result['time'] = time
+            result['salt'] = salt
+            result['hash'] = Digest::MD5.hexdigest(@settings['password'] + time + salt)
+            
+            result
         end
         
         def inbox
@@ -43,7 +41,7 @@ module Smsconnect
             res = Net::HTTP.start(url.host, url.port) {|http|
                 http.request(req)
             }
-            puts res.body
+            res.body
         end
         
         def send(number, text)
@@ -57,7 +55,7 @@ module Smsconnect
             res = Net::HTTP.start(url.host, url.port) {|http|
                 http.request(req)
             }
-            puts res.body
+            res.body
         end
     end
 end
