@@ -35,12 +35,26 @@ puts sms.inbox
 
 ### Send SMS
 
+simple usage:
+
 ```ruby
 require 'smsconnect'
 
 sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
 puts sms.send('<phone_number>', '<text_sms>')
 ```
+
+or you can use other optional params:
+
+```ruby
+require 'smsconnect'
+
+sms = Smsconnect::Smsconnect.new({'login'=>'<your_login>', 'password' => '<your_password>'})
+puts sms.send('<phone_number>', '<text_sms>', '<when>', '<delivery_report>', '<sender_id>', '<sender_phone>', '<user_id>', '<data_code>', '<answer_mail>', '<delivery_mail>')
+```
+
+### 
+
 
 ## Contributing
 
