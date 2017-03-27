@@ -1,4 +1,4 @@
-# require 'smsconnect/version'
+require 'smsconnect/version'
 require 'digest'
 require 'securerandom'
 require 'net/http'
@@ -81,7 +81,7 @@ module Smsconnect
         def inbox
             data = self.getAuth
             data['action'] = 'inbox'
-            data = data.map{|k,v| "#{k}=#{v}"}.join('&')
+            data = data.map{ |k,v| "#{k}=#{v}" }.join('&')
             url = URI.parse(API_SCRIPT + data)
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = url.scheme == 'https'
@@ -156,6 +156,7 @@ module Smsconnect
             data['action'] = 'send_sms'
             data['number'] = number
             data['message'] = text.gsub(/ /, '+')
+
             data['when'] = send_at if send_at
             data['delivery_report'] = delivery_report if delivery_report
             data['sender_id'] = sender_id if sender_id
@@ -167,6 +168,9 @@ module Smsconnect
             data = data.map { |k,v| "#{k}=#{v}" }.join('&')
             url = URI.parse(API_SCRIPT + data)
             
+            data = data.map{ |k,v| "#{k}=#{v}" }.join('&')
+            url = URI.parse(API_SCRIPT + data)
+
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = url.scheme == 'https'
             req = Net::HTTP::Get.new(url.to_s)
