@@ -30,7 +30,7 @@ module Smsconnect
 		end
 
 		def is_error?
-			@error != '0'
+			@error != '0' && @error != nil
 		end
 
 	end

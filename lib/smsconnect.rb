@@ -23,6 +23,33 @@ module Smsconnect
         end
     end
 
+    class InboxResponse
+        attr_reader :error, :delivery_sms, :delivery_report
+
+        def initialize(err, delivery_sms, delivery_report)
+            @error = Error.new(err)
+            @delivery_sms = delivery_sms
+            @delivery_report = delivery_report
+        end
+
+        def is_error?
+            @error.is_error?
+        end
+    end
+
+    class CreditResponse
+        attr_reader :error, :credit
+
+        def initialize(err, credit)
+            @error = Error.new(err)
+            @credit = credit
+        end
+
+        def is_error?
+            @error.is_error?
+        end
+    end
+
     class Smsconnect
         
         API_SCRIPT = "https://api.smsbrana.cz/smsconnect/http.php?"
@@ -64,6 +91,64 @@ module Smsconnect
                 http.request(req)
             }
             res.body
+
+            doc = Nokogiri::XML(res.body)
+            err = nil
+            delivery_sms = []
+            delivery_report = []
+            doc.xpath('//result').each do |result|
+                err = result.at_xpath('err').content if result.at_xpath('err')
+                result.xpath('//inbox/delivery_sms/item').each do |a|
+                    delivery_sms << {
+                        number: a.at_xpath('number').text,
+                        time: a.at_xpath('time').text,
+                        message: a.at_xpath('message').text
+                    }
+                end
+
+                err = result.at_xpath('err').content if result.at_xpath('err')
+                result.xpath('//inbox/delivery_report/item').each do |a|
+                    delivery_report << {
+                        idsms: a.at_xpath('idsms').text,
+                        time: a.at_xpath('time').text,
+                        status: a.at_xpath('status').text
+                    }
+                end
+            end
+
+            puts delivery_sms
+            puts delivery_report
+
+            InboxResponse.new(err, delivery_sms, delivery_report)
+        end
+
+        def credit_info
+            data = self.getAuth
+            data['action'] = 'credit_info'
+            data = data.map { |k,v| "#{k}=#{v}" }.join('&')
+            url = URI.parse(API_SCRIPT + data)
+
+            puts url
+            
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = url.scheme == 'https'
+            req = Net::HTTP::Get.new(url.to_s)
+            res = http.start { |http|
+                http.request(req)
+            }
+
+            doc = Nokogiri::XML(res.body)
+            err = nil
+            price = nil
+            credit = nil
+            sms_count = nil
+            sms_id = nil
+            doc.xpath('//result').each do |result|
+                err = result.at_xpath('err').content if result.at_xpath('err')
+                credit = result.at_xpath('credit').content if result.at_xpath('credit')
+            end
+
+            CreditResponse.new(err, credit)
         end
         
         def send(number, text, send_at = nil, delivery_report=nil, sender_id=nil, sender_phone=nil, user_id=nil, data_code=nil, answer_mail=nil, delivery_mail=nil)
@@ -96,7 +181,7 @@ module Smsconnect
             sms_count = nil
             sms_id = nil
             doc.xpath('//result').each do |result|
-                err = result.at_xpath('err').content
+                err = result.at_xpath('err').content if result.at_xpath('err')
                 price = result.at_xpath('price').content if result.at_xpath('price')
                 sms_count = result.at_xpath('sms_count').content if result.at_xpath('sms_count')
                 credit = result.at_xpath('credit').content if result.at_xpath('credit')
