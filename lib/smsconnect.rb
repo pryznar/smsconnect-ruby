@@ -3,6 +3,7 @@ require 'digest'
 require 'securerandom'
 require 'net/http'
 require 'nokogiri'
+require 'error'
 
 module Smsconnect
 
@@ -168,9 +169,6 @@ module Smsconnect
             data = data.map { |k,v| "#{k}=#{v}" }.join('&')
             url = URI.parse(API_SCRIPT + data)
             
-            data = data.map{ |k,v| "#{k}=#{v}" }.join('&')
-            url = URI.parse(API_SCRIPT + data)
-
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = url.scheme == 'https'
             req = Net::HTTP::Get.new(url.to_s)
