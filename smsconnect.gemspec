@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Smsconnect::VERSION
   spec.authors       = ["Pavel Ryznar"]
   spec.email         = ["pryznar@gmail.com"]
-  spec.summary       = %q{Send and receive SMS with node.js (for Czech Republic)}
+  spec.summary       = %q{Send and receive SMS with Ruby (for Czech Republic)}
   spec.homepage      = ""
   spec.license       = "MIT"
 
